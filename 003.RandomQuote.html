@@ -1,18 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <title>Bootstrap Example</title>
+  <title>Random Quote Page</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author"       content="Nelson Tamashiro">
+  <meta name="description"  content="Presents a random quote">
+  <meta name="keywords"     content="quotes">
+  <meta name="viewport"     content="width=device-width, initial-scale=1.0">
+  
+  <!--BOOTSTRAP & JQUERY IMPORT-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
+  
+  <!--CSS STYLE-->
+  <style>
+    .container-fluid{
+      padding: 15%;
+      text-align: center;
+    }
+    /*#quote_text{*/
+    /*  text-align: left;*/
+    /*}*/
+  </style>
 
-<div class="container">
+  <!--JQUERY SCRIPT-->
+  <script>
+  $(document).ready(function(){
+    var last_slide = $("div.active");
+    var count=1;
+    $("#myCarousel").on('slid.bs.carousel', function(e){
+      last_slide.html("<a href=\"https://google.com\"><p class=\"h1\">count "+count.toString()+"</p></a>");
+      last_slide = $("div.active");
+      count++;
+    });
+  });
+  </script>
+  
+</head><body class="">
+  
+  <div class="container-fluid">
   <h2>Carousel Example</h2>
-  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval=5000>
     <!-- Indicators -->
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -24,17 +53,17 @@
     <div class="carousel-inner">
       <div class="item active">
         <!--<img src="la.jpg" alt="Los Angeles" style="width:100%;">-->
-        <p class="h1">fkjaklçjfkdlasjflksaçjçfa</p>
+        <a href="https://google.com"><p class="h1">fkjaklçjfkdlasjflksaçjçfa</p></a>
       </div>
 
       <div class="item">
         <!--<img src="chicago.jpg" alt="Chicago" style="width:100%;">-->
-        <p class="h1">fkjaklçjfkdlasjflksaçjçfa</p>
+        <a href="https://google.com"><p class="h1">fkjaklçjfkdlasjflksaçjçfa</p></a>
       </div>
     
       <div class="item">
         <!--<img src="ny.jpg" alt="New york" style="width:100%;">-->
-        <p class="h1">fkjaklçjfkdlasjflksaçjçfa</p>
+        <a href="https://google.com"><p class="h1">fkjaklçjfkdlasjflksaçjçfa</p></a>
       </div>
     </div>
 
@@ -50,5 +79,4 @@
   </div>
 </div>
 
-</body>
-</html>
+</body></html>
