@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Random Quotes</title>
+    
+    <meta name="viewport"     content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <style>
+      body{
+        text-align: center;
+        font-size: 40px;
+      }
+    </style>
+    
+    <script>
+      function change_quote(text_toChange){
+          $.ajax({
+            headers: {
+              "X-Mashape-Key": "OivH71yd3tmshl9YKzFH7BTzBVRQp1RaKLajsnafgL2aPsfP9V",
+              Accept: "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            url: "https://andruxnet-random-famous-quotes.p.mashape.com/cat=",
+            success: function(r) {
+              if (typeof r === 'string') {
+                r = JSON.parse(r);
+              }
+              console.log(r.quote);
+              console.log(r.author);
+              text_toChange.html ( "<p>\""+r.quote+"\"<br>"+r.author+"</p>");
+            }
+          });
+        }; // end - change_quote
+      
+      
+      $(document).ready(function(){
+        
+        change_quote( $("#quote_text") );
+        
+      });
+    </script>
+  </head>
+  
+  <body>
+    <h1>Random Quotes</h1>
+    <p      id="quote_text"></p>
+    <button onclick="change_quote($('#quote_text'))">New Quote</button>
+  </body>
+  
+</html>
