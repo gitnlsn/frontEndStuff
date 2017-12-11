@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Twitch Status Monitor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <style>
+      body{
+        text-align: center;
+        font-size: 40px;
+      }
+    </style>
+    
+    <script>
+      function get_channelStatus(channel_name){
+        var stream_status = false;
+        $.ajax({
+          type: 'GET',
+          url: 'https://api.twitch.tv/kraken/streams/'+channel_name,
+          headers: {
+            'Client-ID': '50zud5s32x8ii0vr193rsoztvpgokp',
+          },
+          success: function(response){
+            console.log("twitch stream ajax callback");
+            console.log(response);
+            if (response.stream){
+              stream_status = true;
+            }
+          }, // end - success callback
+          error: function(){
+            console.log("twitch stream error callback");
+            console.log(response);
+          }, // end - error callback
+        }); // end - ajax query
+        $.ajax({
+          type: 'GET',
+          url:'https://api.twitch.tv/kraken/channels/'+channel_name,
+          headers: {
+            'Client-ID': '50zud5s32x8ii0vr193rsoztvpgokp',
+          },
+          success: function(response) {
+            console.log("twitch channel ajax callback");
+            console.log(response);
+            $("#info_results").append("<hr />");
+            $("#info_results").append('<a href='+response.url+'><img src='+response.logo+'></a>');
+            if (response.game){
+              $("#info_results").append('<p>'+response.display_name+' - '+response.game+'</p>');
+            } else {
+              $("#info_results").append('<p>'+response.display_name+' - no game </p>');
+            }
+            if (response.status){
+              $("#info_results").append('<p>'+response.status+'</p>');
+            } else {
+              $("#info_results").append('<p> no status </p>');
+            }
+            if (stream_status){
+              $("#info_results").append('<p>Status: online (update: '+response.updated_at+')</p>');
+            } else{
+              $("#info_results").append('<p>Status: offline (update: '+response.updated_at+')</p>');
+            }
+              
+          }, // end - success callback
+          error: function(response){
+            console.log("twitch channel ajax error callback");
+            console.log(response);
+          }, // end - error callback
+        }); // end - ajax query
+      } //
+    
+      $(document).ready(function(){
+        console.log("document ready");
+        get_channelStatus("my_turingmachine");
+        get_channelStatus("freecodecamp");
+      }); // end - document ready
+    </script>
+  </head>
+  
+  <body>
+    <h1>Twitch Status Monitor</h1>
+    <div id="info_results"></div>
+  </body>
+  
+</html>
+

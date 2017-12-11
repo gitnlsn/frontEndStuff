@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wikipedia Quick Search</title>
+    <meta name="viewport"     content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <style>
+      body{
+        text-align: center;
+        font-size: 40px;
+      }
+    </style>
+    
+    <script >
+      
+      function changeQuote(){
+        console.log( "changeQuote to search: "+$("#search_text").val() );
+        $.ajax({
+          url: 'http://en.wikipedia.org/w/api.php',
+          data: { action: 'query', list: 'search', srsearch: $("#search_text").val(), format: "json" },
+          dataType: 'jsonp',
+          success: processResult,
+        });
+        console.log("changeQuote: finished.");
+      }
+      
+      function processResult(apiResult){
+        console.log("changeQuote: processing results");
+        $("#search_results").html("<div></div>");
+        for (var i = 0; i < apiResult.query.search.length; i++){
+          $("#search_results").append('<hr><p><strong>'+apiResult.query.search[i].title+'</strong> (<a target="_blank" href=https://en.wikipedia.org/?curid='+apiResult.query.search[i].pageid+'>link</a>)<br />'+apiResult.query.search[i].snippet+'</p>');
+          console.log(apiResult.query.search[i]);
+        }
+      }
+      
+    </script>
+  </head>
+  
+  <body>
+    <h1>Wikipedia Quick Search</h1>
+    <input type="text" id="search_text" onchange="changeQuote()">
+    <div id="search_results"></div>
+  </body>
+  
+</html>
