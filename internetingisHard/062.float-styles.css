@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /*font-size: 40px;*/
+  /*text-align: center;*/
+}
+
+.menu {
+  height: 100px;
+  background-color: #B2D6FF;    /* Medium blue */
+}
+
+h1, h2{
+  text-align: center;
+}
+
+.container{
+  overflow: hidden;
+  clear: both;
+  background-color: #EAEDF0;
+}
+
+.page {
+  width: 90%;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: #EAEDF0;
+}
+
+.sidebar {
+  float: left;
+  height: 160px;
+  width: 31.11%;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin: 1%;
+  background-color: #F09A9D;    /* Red */
+}
+
+.content {
+  float: left;
+  height: 160px;
+  overflow: scroll;
+  width: 31.11%;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin: 1.11%;
+  background-color: #F5CF8E;    /* Yellow */
+}
+
+.footer {
+  /*clear: both;*/
+  overflow: hidden;
+  /*height: 200px;*/
+  /*margin: 0 auto;*/
+  background-color: #D6E9FE;    /* Light blue */
+}
+
+.column {
+  float: left;
+  width: 31%;
+  margin: 20px 1.15%;
+  height: 160px;
+  background-color: #B2D6FF;    /* Medium blue */
+}
+
+

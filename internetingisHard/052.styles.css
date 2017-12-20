@@ -1,0 +1,141 @@
+@font-face {
+  font-family: "ubuntu";
+  src: url("ubuntu-fonts/Ubuntu-R.ttf");
+}
+
+*{
+  padding: 0px;
+  border:  0px solid #000;
+  margin:  0px;
+  box-sizing: border-box;
+}
+
+body{
+  font-size: 40px;
+  font-family: ubuntu;
+}
+
+h1, h2{
+  text-align: center;
+  padding: 10px;
+  border:   2px solid #808080;
+  border-radius: 5px;
+  margin:  10px;
+}
+
+p{
+  text-align: justify;
+  padding: 10px;
+  border:   2px solid #808080;
+  border-radius: 5px;
+  margin:  10px;
+}
+
+/*p:first-of-type {*/
+/*  color: #7E8184;*/
+/*  font-style: italic;*/
+/*}*/
+
+p:last-of-type {
+  margin-bottom: 50px;
+}
+
+.page{
+  width: 80%;
+  margin: auto 15% auto auto;
+}
+
+.synopsis{
+  color: #7e8184;
+  font-style: italic;
+}
+
+.synopsis em{
+  font-style: normal;
+}
+
+.button {
+  display: block;
+  text-decoration: none;
+  
+  color: #FFF;
+  background-color: #5995DA;    /* Blue */
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #5D6063;    /* Dark gray */
+  border-radius: 5px;
+
+  width: 200px;
+  padding: 20px;
+  margin: 20px auto;
+}
+
+.button:visited {
+  display: block;
+  text-decoration: none;
+  
+  color: #FFF;
+  background-color: #5995DA;    /* Blue */
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #5D6063;    /* Dark gray */
+  border-radius: 5px;
+
+  width: 200px;
+  padding: 20px;
+  margin: 20px auto;
+}
+
+.button:hover,
+.button:visited:hover{
+  color: #FFF;
+  background-color: #76AEED; /*light blue*/
+}
+
+.button:active,
+.button:visited:active {
+  color: #FFF;
+  background-color: #5995DA;  /* Blue */
+}
+
+.call-to-action {
+  font-style: italic;
+  background-color: #EEB75A;    /* Yellow */
+}
+
+.call-to-action:link,
+.call-to-action:visited {
+  font-style: italic;
+  background-color: #EEB75A;     /* Yellow */
+}
+
+.call-to-action:hover,
+.call-to-action:visited:hover {
+  background-color: #F5CF8E;     /* Light yellow */
+}
+
+.call-to-action:active,
+.call-to-action:visited:active {
+  background-color: #EEB75A;     /* Yellow */
+}
+
+a:link {
+  color: blue;
+  text-decoration: none;
+}
+a:visited {
+  color: purple;
+}
+a:visited:hover {
+  color: orange;
+}
+a:visited:active{
+  color: red;
+}
+a:hover {
+  color: aqua;
+  text-decoration: underline;
+}
+a:active {
+  color: red;
+}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>Calculator</title>
+  <meta name="viewport" content="width=device-width" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <style>
+    body{
+      text-align: center;
+      font-size: 40px;
+    }
+    button, input{
+      font-size: 30px;
+    }
+    input {
+      width: 120px;
+    }
+  </style>
+  
+  <script>
+    
+    var Timer = function(pomo_duration_min){
+      var pomo_startTime = new Date();
+      var pomo_duration_ms=pomo_duration_min*60000;
+      this.isActive = false; // we expectate to count time on pomo.
+      this.finished = true;  // pomo timer finished.
+      
+      this.getLocalTime = function (){
+        var local_time = new Date();
+        return /[0-9][0-9]\:[0-9][0-9]\:[0-9][0-9]/.exec(local_time.toTimeString());
+      } // end - getTime
+      
+      this.startPomoTimer = function(){
+        pomo_startTime = new Date();
+        pomo_duration_ms = $("#set_time_min").val()*60000;
+        console.log(pomo_duration_ms);
+        this.isActive = true;
+        this.finished = false;
+        document.getElementById("alert_sound").play();
+      } // end - startPomoTimer
+      
+      this.getPomoTimer = function(){
+        var time_estimate = new Date().getTime() - pomo_startTime.getTime();
+        if (time_estimate > pomo_duration_ms){
+          time_estimate = 0;
+          this.finished = true;
+        }
+        else time_estimate = pomo_duration_ms - time_estimate;
+        var pomo_time = {
+          seconds: parseInt((time_estimate%60000) /1000).toString(),
+          minutes: parseInt((time_estimate - (time_estimate%60000)) /60000).toString(),
+        };
+        return (pomo_time.minutes.length>1? pomo_time.minutes :"0"+pomo_time.minutes)+":"+(pomo_time.seconds.length>1? pomo_time.seconds :"0"+pomo_time.seconds);
+      }// end - getPomoTimer
+      
+    }// end - timerObject
+    
+    var myPomoTimer = new Timer(25);
+    
+    function updatePomoTime(){
+      $("#local_time").html( "Local Time: "+myPomoTimer.getLocalTime() );
+      console.log(myPomoTimer.isActive, myPomoTimer.finished);
+      if( myPomoTimer.isActive ){
+        if( myPomoTimer.finished ){
+          myPomoTimer.isActive = false;
+          document.getElementById("alert_sound").play();
+        }
+        var pomo_time  = myPomoTimer.getPomoTimer();
+        $("#pomo_time" ).html( "Pomo Time: " +pomo_time );
+      }
+    } // end - updatePomoTime
+    
+    function doStart(){
+      myPomoTimer.startPomoTimer();
+    } // end - doStart
+    
+    function checkTimeSet(){
+      
+    } // end - checkTimeSet
+    
+    $(window).ready(function(){
+      updatePomoTime();
+      var pomo_time  = myPomoTimer.getPomoTimer();
+      $("#pomo_time" ).html( "Pomo Time: " +pomo_time );
+    });
+
+    window.setInterval(updatePomoTime, 1000);
+
+  </script>
+  
+</head>
+
+<body>
+  <audio id="alert_sound" src="http://soundbible.com/mp3/sms-alert-1-daniel_simon.mp3" preload="auto"></audio>
+  <h1>Pomodoro Clock</h1>
+  <p id="local_time"></p>
+  <p id="pomo_time"></p>
+  <input type="number" value="25" id="set_time_min" oninput="checkTimeSet()">
+  <button onclick="doStart()">Start!</button>
+</body>
+
+</html>
