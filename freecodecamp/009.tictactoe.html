@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  
+  <title>Tic-Tac-Toe Game</title>
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    
+    body{
+      font-size: 40px;
+      text-align: center;
+    }
+    
+    h1{
+      margin: 2% auto 1% auto;
+    }
+    
+    .page{
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .game-div{
+      width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    
+    .game-board-div{
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background-color: #444;
+      /*border-radius: 10px;*/
+    }
+    
+    .board-position{
+      width:  32%;
+      margin: 0.66%;
+      background-color: #EEE;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s;
+    }
+    
+    .board-position:hover{
+      background-color: gray;
+    }
+    
+    .board-position:active{
+      transition: 0s;
+      /*background-color: #0F0;*/
+      background-color: lime;
+    }
+    
+    .board-position:before{
+      content: "";
+      display: block;
+      padding-top: 100%;
+    }
+    
+    .game-status-div{
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .status-attribute{
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      border: 2px solid black;
+    }
+    
+    .attribute-option{
+      border-radius: 10px;
+      border: 1px solid white;
+      transition: 0.3s;
+    }
+
+    .attribute-option:hover{
+      border: 1px solid #000;
+    }
+    
+    .attribute-option:active{
+      transition: 0s;
+      background-color: silver;
+    }
+    
+    .attribute-turn-red:active{
+      background-color: red;
+    }
+    
+    .attribute-turn-green:active{
+      background-color: lime;
+    }
+  </style>
+  
+  <script>
+    var game_isPlayerXTurn = true;
+    var board = {
+      "pos-1": null,
+      "pos-2": null,
+      "pos-3": null,
+      "pos-4": null,
+      "pos-5": null,
+      "pos-6": null,
+      "pos-7": null,
+      "pos-8": null,
+      "pos-9": null,
+    }
+    var score = {
+      "player_X": 0,
+      "player_O": 0,
+    };
+    var win_conditions = [
+      ["pos-1", "pos-2", "pos-3"],
+      ["pos-4", "pos-5", "pos-6"],
+      ["pos-7", "pos-8", "pos-9"],
+      ["pos-1", "pos-4", "pos-7"],
+      ["pos-2", "pos-5", "pos-8"],
+      ["pos-3", "pos-6", "pos-9"],
+      ["pos-1", "pos-5", "pos-9"],
+      ["pos-3", "pos-5", "pos-7"], ];
+    var all_positions = [
+      "pos-1", "pos-2", "pos-3",
+      "pos-4", "pos-5", "pos-6",
+      "pos-7", "pos-8", "pos-9",  ];
+    var winner_path_index = -1;
+    var com_turn = false;
+    
+    function makeMove(position){
+      console.log("makeMove: called");
+      if ( check_moveValidity(position) ){
+        if (game_isPlayerXTurn) board[position] = "X";
+        else                    board[position] = "O";
+        updateBoard();
+        changePlayerTurn();
+      } // end - handle valid move
+    } // end - makeMove
+    
+    function check_moveValidity(position){
+      // console.log("check_moveValidity: called");
+      if (board[position]) return false;
+      return true;
+    } // end - check_moveValidity
+    
+    function newGame(){
+      resetBoard();
+      resetScore();
+      changePlayerTurn();
+      com_turn = false;
+    } // end - newGame
+    
+    function updateBoard(){
+      console.log("updateBoard: called");
+      for (key in Object.keys($(".board-position")))
+        if( $(".board-position")[key] )
+          updatePosition($(".board-position")[key]);
+    } // end - updateBoard
+
+    function updatePosition(elem){
+      $("#"+elem.id).css("transition", "0.3s");
+      if (board[elem.id] === null){
+        $("#"+elem.id).css("background-color", "");
+      }
+      if (board[elem.id] ==='X'){
+        $("#"+elem.id).css("background-color", "lime");
+      }
+      if (board[elem.id] ==='O'){
+        $("#"+elem.id).css("background-color", "red");
+      }
+    } // end - updatePosition
+    
+    function changePlayerTurn(){
+      console.log("changePlayerTurn: called");
+      if ( game_isPlayerXTurn ){
+        game_isPlayerXTurn = false;
+        $("#attribute-turn").html("&gt; &gt;");
+        $("#attribute-turn").removeClass("attribute-turn-green");
+        $("#attribute-turn").addClass("attribute-turn-red");
+        blink( $("#attribute-turn"), "red" );
+      }
+      else {
+        game_isPlayerXTurn = true;
+        $("#attribute-turn").html("&lt; &lt;");
+        $("#attribute-turn").removeClass("attribute-turn-green");
+        $("#attribute-turn").addClass("attribute-turn-green");
+        blink( $("#attribute-turn"), "lime" );
+      }
+    } // end - changePlayerTurn
+    
+    function blink(elem, color="silver"){
+      elem.css("background-color", color);
+      $(".turn-class").css("background-color", color);
+      setTimeout(function(){
+        elem.css("background-color", "");
+      }, 300);
+    } // end - blink
+    
+    function resetBoard(){
+      console.log("resetBoard: called");
+      for (key in board) board[key] = null;
+      updateBoard();
+    } // end - resetBoard
+    
+    function resetScore(){
+      $("#score_playerO").html(score.player_O=0);
+      $("#score_playerX").html(score.player_X=0);
+    } // end - resetScore
+    
+    function updateScore(){
+      if (game_isPlayerXTurn) $("#score_playerO").html(++score.player_O);
+      else                    $("#score_playerX").html(++score.player_X);
+    } // end - updateScore
+    
+    function check_Winner(){
+      console.log("check_Winner: called");
+      var path = win_conditions.findIndex(function(elem){
+        return elem.every(function(curr, index, array){
+          if (board[curr])
+            if (board[curr] == board[array[0]]) return true;
+          return false;
+        }); // end - every position on path
+      }); // end - findIndex
+      return path;
+    } // end - check_Winner
+    
+    function highlight_path(path, color="yellow"){
+      path.forEach(function(position){
+        $("#"+position).css("transition", "0.3s");
+        $("#"+position).css("background-color", color);
+      });
+    } // end - highlight_path
+    
+    function check_EndGame(){
+      console.log("check_EndGame: called");
+      return all_positions.every(function(elem){
+        return board[elem];
+      });
+    } //end - check check_EndGame
+    
+    function game_eval(callback=function(){}){
+      if ( (winner_path_index=check_Winner())!=-1 ){
+        highlight_path(win_conditions[winner_path_index]);
+        updateScore();
+        setTimeout(function(){
+          resetBoard();
+          callback();
+        }, 500);
+      } // end - winner handle
+      else if( check_EndGame() ){
+        highlight_path(all_positions, "magenta");
+        setTimeout(function(){
+          resetBoard();
+          callback();
+        }, 500);
+      } // end - draw handle
+      else callback();
+    } // end - game_eval
+    
+    function user_clickPosition(event){
+      if (!com_turn) {
+        makeMove(event.target.id);
+        game_eval( com_Plays );
+      } // handles non com_turn only
+    } // end - user_clickPosition
+    
+    function com_Plays(){
+      com_turn = true;
+      setTimeout(com_makeMove, 500);
+    } // end - com_Plays
+    
+    function com_makeMove(){
+      console.log("com_makeMove: called");
+      if (com_turn){
+        var possible_moves = all_positions.filter(function(elem){
+          return check_moveValidity(elem);
+        });
+        var choice = parseInt(Math.random()*possible_moves.length);
+        makeMove(possible_moves[choice]);
+        com_turn = false;
+      }
+      game_eval();
+    } // end- com_makeMove
+    
+    function game_setup(){
+      console.log("game_setup: called");
+      $('#new-game-option').on('click',newGame);
+      $(".board-position").on('click', user_clickPosition);
+    } // end - setup
+    
+    $(window).ready(function(){
+      console.log("Tic-Tac-Toe!");
+      game_setup();
+    }); // end - window ready
+  </script>
+  
+</head>
+<body>
+
+  <div class="page">
+    
+    <div class="game-div">
+      
+      <div class="game-board-div">
+        <div class="board-position" id="pos-1"></div>
+        <div class="board-position" id="pos-2"></div>
+        <div class="board-position" id="pos-3"></div>
+        <div class="board-position" id="pos-4"></div>
+        <div class="board-position" id="pos-5"></div>
+        <div class="board-position" id="pos-6"></div>
+        <div class="board-position" id="pos-7"></div>
+        <div class="board-position" id="pos-8"></div>
+        <div class="board-position" id="pos-9"></div>
+      </div> <!--end - game-board-div-->
+      
+      <div class="game-status-div">
+        <div class="status-attribute">
+          <h1>Tic-Tac-Toe</h1>
+        </div> <!--end - game title-->
+        <div class="status-attribute">
+          <div>Player Green</div>
+          <div>Player Red</div>
+        </div> <!--end status-player-names-->
+        <div class="status-attribute">
+          <div id="score_playerX">0</div>
+          <div id="score_playerO">0</div>
+        </div> <!--end - status-score-->
+        <div class="status-attribute">
+          <div class="attribute-option attribute-turn-green" id="attribute-turn">&lt; &lt;</div>
+        </div> <!--end - player-turn-->
+        <div class="status-attribute">
+          <div class="attribute-option" id="new-game-option">New Game</div>
+        </div>
+      </div> <!--end - game-status-div-->
+    
+    </div> <!--end - game-div-->
+  
+  </div> <!--end - page-->
+  
+</body>
+</html>
