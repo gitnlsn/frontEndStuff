@@ -150,7 +150,9 @@
         else                    board[position] = "O";
         updateBoard();
         changePlayerTurn();
+        return true;
       } // end - handle valid move
+      return false;
     } // end - makeMove
     
     function check_moveValidity(position){
@@ -275,8 +277,7 @@
     
     function user_clickPosition(event){
       if (!com_turn) {
-        makeMove(event.target.id);
-        game_eval( com_Plays );
+        if (makeMove(event.target.id)) game_eval( com_Plays );
       } // handles non com_turn only
     } // end - user_clickPosition
     
