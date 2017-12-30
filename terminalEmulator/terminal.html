@@ -176,10 +176,6 @@
       document.getElementsByClassName('terminal-history')[0].appendChild(node);
     }
     
-    function command_completion(word){
-      
-    } // end - command_completion
-    
     function exe_cmd(){
       console.log("exe_cmd called");
       var input_processed = text_input.join('').split(' ').filter(function(elem){
@@ -198,8 +194,8 @@
     
     function backspace(){
       console.log("backspace called");
-      event.preventDefault();
-      text_input.pop();
+      // text_input.pop();
+      text_input = text_input.slice(0,cursor_position-1).concat( text_input.slice(cursor_position) );
       moveCursorLeft();
       update_promptLine();
     } // end - backspace
