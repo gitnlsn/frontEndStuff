@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+  <title>Terminal Interface Development</title>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width">
+  <script></script>
+  
+  <style>
+    *{
+      padding: 0;
+      border: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    
+    body{
+      width: 100vw;
+      height: 100vh;
+    }
+    
+    .debbuging{
+      border: 2px solid black;
+    }
+    
+    .flex-col{
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+    }
+    
+    .terminal{
+      width: 800px;
+      height: 600px;
+      margin: auto;
+      overflow: scroll;
+      font-family: Monospace;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+    
+    .terminal-history{
+
+    }
+    
+    .prompt{
+      
+    }
+    
+    .prompt-usr{
+      
+    } /*span-class*/
+    
+    .prompt-pwd{
+      
+    } /*span-class*/
+    
+    .prompt-txt{
+      
+    } /*span-class*/
+    
+  </style>
+  
+  <script>
+    var text_input = [];
+    var hist_key   = {};
+
+    
+    function command_completion(word){
+      
+    }
+    
+    function handleKey_tab(){
+      
+    } // end - handleKey_tab
+
+    function handleKey_Backspace(){
+      text_input.pop();
+    }
+    
+    function handleKey_Enter(){
+      var node = document.createElement('p');
+      var text = document.createTextNode( text_input.join("") );
+      node.appendChild(text);
+      console.log(node, text);
+      document.getElementById("terminal-history").appendChild(node);
+      // document.getElementById("prompt-txt").innerHTML =text_input.join("");
+      document.getElementById("prompt-txt").innerHTML = (text_input = []).join("");
+    }
+
+    function handle_keydown(event){
+      console.log("get_keydown called.");
+      console.log(event.key);
+      hist_key[event.key] = true;
+      
+      switch(event.key){
+        case 'Alt':
+        case 'Control':
+        case 'Shift':
+          break;
+        case 'Backspace':
+          handleKey_Backspace();
+          break;
+        case 'Enter':
+          handleKey_Enter();
+          break;
+        case 'Tab':
+          event.preventDefault();
+          break;
+        default:
+          text_input.push(event.key);
+          document.getElementById("prompt-txt").innerHTML = text_input.join('');
+          break;
+      } // end switch event.key
+      console.log (text_input.join(''), hist_key);
+    }
+    
+    function handle_keyup(event){
+      console.log("get_keyup   called.");
+      // console.log(event.key);
+      if ( hist_key.hasOwnProperty(event.key) ) delete hist_key[event.key];
+      else if (Object.keys(hist_key).length==1) hist_key={};
+      // console.log (text_input.join(''), hist_key);
+    }
+    
+    window.addEventListener("keydown", handle_keydown );
+    window.addEventListener("keyup"  , handle_keyup   );
+    // window.addEventListener("keypress", get_keypress);
+    
+  </script>
+  
+</head>
+<body class="flex-col">
+  
+  <div class="terminal debbuging">
+    <div id="terminal-history">
+      <p class="terminal-history-paragraph">This is a terminal paragraph.</p>
+      <p class="terminal-history-paragraph">On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. On Text Wrap. </p>
+      <p class="terminal-history-paragraph">This is a terminal paragraph.</p>
+      <p class="terminal-history-paragraph">OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.OnWordWrap.</p>
+    </div>
+    <div class="prompt">
+      <span id="prompt-usr">nelson</span>
+      <span id="prompt-at">@</span>
+      <span id="prompt-mac">terminal</span>
+      <span id="prompt-pwd">~/</span>
+      <span id="prompt-sym">&gt;</span>
+      <span id="prompt-txt">this is the input text</span>
+    </div> <!--end - promt-->
+  </div> <!--end - terminal-->
+  
+</body>
+</html>

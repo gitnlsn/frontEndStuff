@@ -42,12 +42,12 @@
     }
     
     .simon-game-board{
-      height: 600px;
-      width : 800px;
-      margin: auto;
-      border: 5px solid black;
-      border-radius: 20px;
-      background-color: gainsboro;
+      height            : 600px;
+      width             : 800px;
+      margin            : auto;
+      border            : 5px solid black;
+      border-radius     : 20px;
+      background-color  : gainsboro;
     }
     
     .board-button-area{
@@ -192,7 +192,6 @@
       $(elem_rel[button_num]["audio-id"]).trigger("play");
       setTimeout(function(){
         $(elem_rel[button_num]["class-ident"]).removeClass(elem_rel[button_num]["color-class"]);
-        $(elem_rel[button_num]["audio-id"]).trigger("pause");
       }, 300);
     } // end - blink
     function sing_comPath(note_num=0, callback=sing_comPath){
@@ -200,7 +199,7 @@
       setTimeout(function(){
         blinkSound(num2button[com_path[note_num]]);
         callback(note_num+1);
-      }, 500);
+      }, 600);
     } // end - blink_Path
     function get_randomNote(){
       return parseInt(1+Math.random()*4);
