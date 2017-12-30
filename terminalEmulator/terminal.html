@@ -97,7 +97,7 @@
     
     function cmd_clear(){
       var terminal_lines = document.getElementsByClassName('terminal-history')[0];
-      console.log(terminal_lines);
+      // console.log(terminal_lines);
       while (terminal_lines.children.length>0) terminal_lines.removeChild(terminal_lines.firstChild);
     } // end - cmd_clear
     
@@ -107,7 +107,18 @@
      .replace(/</g, "&lt;"  )
      .replace(/>/g, "&gt;"  )
      .replace(/"/g, "&quot;")
+     .replace(/ /g, "&nbsp;")
      .replace(/'/g, "&#039;");
+    }
+    
+    function unEscapeHtml(safe) {
+    return safe
+     .replace(/&amp;/g , "&" )
+     .replace(/&lt;/g  , "<" )
+     .replace(/&gt;/g  , ">" )
+     .replace(/&quot;/g, '"' )
+     .replace(/&nbsp;/g, " " )
+     .replace(/&#039;/g, "'" );
     }
     
     function new_promptLine(){
@@ -178,7 +189,7 @@
     
     function exe_cmd(){
       console.log("exe_cmd called");
-      var input_processed = text_input.join('').split(' ').filter(function(elem){
+      var input_processed = text_input.map(unEscapeHtml).join('').split(' ').filter(function(elem){
         return elem.length>0;
       });
       if (text_input.length>1){
