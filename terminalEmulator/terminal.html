@@ -1,0 +1,280 @@
+<!doctype html>
+<html>
+<head>
+  <title>Terminal Interface Development</title>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width">
+  <script></script>
+  
+  <style>
+    *{
+      padding: 0;
+      border: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    
+    body{
+      width: 100vw;
+      height: 100vh;
+    }
+    
+    .debbuging{
+      border: 2px solid black;
+    }
+    
+    .flex-col{
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+    }
+    
+    .terminal-shape{
+      width       : 400px;
+      height      : 600px;
+      margin      : auto;
+    }
+    
+    .terminal-behave{
+      white-space : normal;
+      word-wrap   : break-word;
+      overflow    : scroll;
+    }
+    
+    .terminal-theme{
+      font-family : Monospace;
+      background-color: black;
+      color: lime;
+      /*background: repeating-linear-gradient(black, lime 3%, black 2%);;*/
+    }
+    
+    .catode-ray-anim{
+      /*opacity: 0.5;*/
+      /*animation: catode-ray 800ms infinite ease-in-out alternate;*/
+      /*background: repeating-linear-gradient(black 0%, green  1%, black 2%);*/
+    }
+    
+    @keyframes catode-ray{
+        0% { background: repeating-linear-gradient(black 0%, green  0%, black 10%);}
+       10% { background: repeating-linear-gradient(black 0%, green  1%, black 10%);}
+       20% { background: repeating-linear-gradient(black 0%, green  2%, black 10%);}
+       30% { background: repeating-linear-gradient(black 0%, green  3%, black 10%);}
+       40% { background: repeating-linear-gradient(black 0%, green  4%, black 10%);}
+       50% { background: repeating-linear-gradient(black 0%, green  5%, black 10%);}
+       60% { background: repeating-linear-gradient(black 0%, green  6%, black 10%);}
+       70% { background: repeating-linear-gradient(black 0%, green  7%, black 10%);}
+       80% { background: repeating-linear-gradient(black 0%, green  8%, black 10%);}
+       90% { background: repeating-linear-gradient(black 0%, green  9%, black 10%);}
+      100% { background: repeating-linear-gradient(black 0%, green 10%, black 10%);}
+    }
+    
+    .blink-char{
+      animation: blink steps(1) 500ms infinite alternate;
+    }
+    
+    @keyframes blink{
+      50%   { background-color: lime;}
+    }
+    
+  </style>
+  
+  <script>
+    // var
+    var text_input  = [];
+    var hist_key    = {};
+    var prompt={
+      usr : 'user',
+      at  : '@'   ,
+      mac : 'home',
+      pwd : '~/'  ,
+      sym : '>'   ,
+    };
+    var prompt_txt_node = null;
+    var cursor_position = 0;
+    var commands ={
+      'clear': cmd_clear,
+    }
+    
+    function cmd_clear(){
+      var terminal_lines = document.getElementsByClassName('terminal-history')[0];
+      console.log(terminal_lines);
+      while (terminal_lines.children.length>0) terminal_lines.removeChild(terminal_lines.firstChild);
+    } // end - cmd_clear
+    
+    function escapeHtml(unsafe) {
+    return unsafe
+     .replace(/&/g, "&amp;" )
+     .replace(/</g, "&lt;"  )
+     .replace(/>/g, "&gt;"  )
+     .replace(/"/g, "&quot;")
+     .replace(/'/g, "&#039;");
+    }
+    
+    function new_promptLine(){
+      console.log("new_promptLine called");
+      text_input      = [];
+      cursor_position = 0;
+      def = {
+        usr :'usr'  ,
+        at  :'@'    ,
+        mac :"home" ,
+        pwd :"~/"   ,
+        sym :'>'    ,
+      }
+      var node = document.createElement('p');
+      var node_usr = document.createElement('span');
+      var node_at  = document.createElement('span');
+      var node_mac = document.createElement('span');
+      var node_pwd = document.createElement('span');
+      var node_sym = document.createElement('span');
+      prompt_txt_node = document.createElement('span');
+      node_usr.innerHTML = prompt.usr;
+      node_at .innerHTML = prompt.at ;
+      node_mac.innerHTML = prompt.mac;
+      node_pwd.innerHTML = prompt.pwd;
+      node_sym.innerHTML = prompt.sym;
+      node.appendChild(node_usr);
+      node.appendChild(node_at );
+      node.appendChild(node_mac);
+      node.appendChild(node_pwd);
+      node.appendChild(node_sym);
+      node.appendChild(prompt_txt_node);
+      // console.log(node);
+      // console.log(document.getElementById('terminal-history'));
+      document.getElementsByClassName('terminal-history')[0].appendChild(node);
+      return node;
+    } // end - write_usrInput
+    
+    function update_promptLine(to_blink=true){
+      if (to_blink){
+        prompt_txt_node.innerHTML = '';
+        var text_normal_1 = document.createElement('span');
+        var text_normal_2 = document.createElement('span');
+        var text_blink    = document.createElement('span');
+        text_blink.className = 'blink-char';
+        text_normal_1.innerHTML = text_input.slice(                0, cursor_position  ).join('');
+           text_blink.innerHTML = text_input.slice(cursor_position  , cursor_position+1).join('');
+        text_normal_2.innerHTML = text_input.slice(cursor_position+1).join('');
+        // console.log(cursor_position, text_input.length);
+        if (cursor_position==text_input.length){
+          text_blink.innerHTML += '&nbsp;';
+          // var space = document.createElement('')
+        }
+        prompt_txt_node.appendChild(text_normal_1);
+        prompt_txt_node.appendChild(text_blink);
+        prompt_txt_node.appendChild(text_normal_2);
+      }
+      // console.log();
+      else prompt_txt_node.innerHTML = text_input.join('');
+      document.getElementsByClassName('terminal-behave')[0].scrollTop = document.getElementsByClassName('terminal-behave')[0].scrollHeight;
+    } // end - update_promptLine
+    
+    function write_line(text_toWrite){
+      update_promptLine(to_blink=false);
+      var node = document.createElement('p');
+      node.innerHTML = text_toWrite;
+      document.getElementsByClassName('terminal-history')[0].appendChild(node);
+    }
+    
+    function command_completion(word){
+      
+    } // end - command_completion
+    
+    function exe_cmd(){
+      console.log("exe_cmd called");
+      var input_processed = text_input.join('').split(' ').filter(function(elem){
+        return elem.length>0;
+      });
+      if (text_input.length>1){
+        console.log(input_processed);
+        if ( input_processed[0] in commands){
+          commands[input_processed[0]] (text_input.join('').slice(1));
+        } // handle command
+        else{
+          write_line('Command not found.');
+        } // handle command not found
+      } // command try handle
+    } // exe_cmd
+    
+    function backspace(){
+      console.log("backspace called");
+      event.preventDefault();
+      text_input.pop();
+      moveCursorLeft();
+      update_promptLine();
+    } // end - backspace
+      
+    function moveCursorRight(){
+      console.log("moveCursorRight called");
+      cursor_position ++;
+      if(cursor_position>text_input.length) cursor_position = text_input.length;
+      update_promptLine();
+    } // end - moveCursorRight
+    
+    function moveCursorLeft(){
+      console.log("moveCursorLeft called");
+      cursor_position --;
+      if (cursor_position<0) cursor_position=0;
+      update_promptLine();
+    } // end - moveCursorLeft
+    
+    function event_keydown(event){
+      console.log("event_keydown called.");
+      // console.log(event.key);
+      hist_key[event.key] = true;
+      // update_promptLine();
+      if (event.key==='Backspace' ) backspace();
+      if (event.key==='Tab'       ) command_completion();
+      if (event.key==='ArrowRight') moveCursorRight();
+      if (event.key==='ArrowLeft' ) moveCursorLeft();
+      // event.preventDefault();
+    } // end - event_keyup
+    
+    function event_keypress(event){
+      console.log("event_keypress called.");
+      // console.log(event.key);
+      if (event.key==='Enter') {
+        update_promptLine(to_blink=false);
+        exe_cmd();
+        new_promptLine();
+      }
+      else{
+        text_input.push(escapeHtml(event.key));
+        cursor_position++;
+      }
+      update_promptLine();
+      // console.log (text_input.join(''), hist_key);
+    } // end - event_keyup
+    
+    function event_keyup(event){
+      console.log("get_keyup   called.");
+      if ( hist_key.hasOwnProperty(event.key) ) delete hist_key[event.key];
+      else setTimeout(function(){
+        hist_key={};
+      }, 300);
+      // console.log (text_input.join(''), hist_key);
+    }
+    
+    window.addEventListener("keydown" , event_keydown );
+    window.addEventListener("keypress", event_keypress);
+    window.addEventListener("keyup"   , event_keyup   );
+    window.onload = function(){
+      new_promptLine();
+      update_promptLine();
+    };
+    // window.addEventListener("keypress", get_keypress);
+    
+  </script>
+  
+</head>
+<body class="flex-col">
+  
+  <div class="terminal-shape terminal-behave terminal-theme catode-ray-anim debbuging">
+    <div class="terminal-history">
+      <!--<p class="terminal-history-paragraph">This is a terminal paragraph.</p>-->
+    </div>
+    <!--<p id='prompt'><span class="blink-char"></span></p>-->
+  </div> <!--end - terminal-->
+  
+</body>
+</html>
